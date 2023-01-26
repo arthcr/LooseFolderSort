@@ -1,0 +1,20 @@
+import os
+import shutil
+
+masterFolder = 'G:/ImageArchives/Fuji_XT30/2023' # master folder goes here
+
+subfolders = [ f.path for f in os.scandir(masterFolder) if f.is_dir() ]
+
+for targetfolder in subfolders:
+	extensions = {item.split('.')[-1] for item in os.listdir(targetfolder) if os.path.isfile(os.path.join(targetfolder, item))}
+
+	# create folders for each extension type
+	for extension in extensions:
+		if not os.path.exists(os.path.join(targetfolder, extension)):
+			os.mkdir(os.path.join(targetfolder, extension))
+
+	# move files
+	for item in os.listdir(targetfolder):
+		if os.path.isfile(os.path.join(targetfolder, item)):
+			fileextension = item.split('.')[-1]
+			shutil.move(os.path.join(targetfolder, item), os.path.join(targetfolder, fileextension, item))
